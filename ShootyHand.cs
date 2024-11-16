@@ -19,11 +19,11 @@ namespace SHOOTYMcSHOOTY
         public Weapon currentWeapon;
 
         public float CurrentRotation;
-        public ShootyHand (Texture2D Texture, Point Position, float Scale)
+        public ShootyHand (Texture2D Texture, Point Position, float scale)
         {
             this.Texture = Texture;
             this.Position = Position;
-            this.Scale = Scale;
+            this.Scale = scale;
         }
 
         public void OrientHand(MouseState mousy)

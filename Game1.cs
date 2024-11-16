@@ -69,8 +69,8 @@ namespace SHOOTYMcSHOOTY
                 theBozo.MovePlayer(Keystate, mousoi, platform);
                 theBozo.Displacement(platform);
                 theBozo.UpdateAnimations();
-                theBozo.shooty.OrientHand(mousoi);
-                //ShotyLikeAMelody.OrientHand(mousoi);
+                theBozo.UpdateHand(mousoi);
+                ShotyLikeAMelody.OrientHand(mousoi);
             }
 
             base.Update(gameTime);

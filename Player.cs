@@ -15,13 +15,8 @@ namespace SHOOTYMcSHOOTY
 
         public Texture2D Hand;
         public float ScaleH;
-        public ShootyHand shooty
-        {
-            get
-            {
-                return new ShootyHand(Hand, new Point(Position.X + Size.X / 2, Position.Y + Size.Y / 2), ScaleH);
-            }
-        }
+        public ShootyHand shooty;
+
         public Player(Point position, Point Size, Texture2D[][] animation, bool IsCollisionOn, int[] frameIntervol, Vector2[][] Origins, float Scale, Texture2D Hand, float ScaleH)
         {
             this.Position = position;
@@ -33,6 +28,14 @@ namespace SHOOTYMcSHOOTY
             this.Scale = Scale;
             this.Hand = Hand;
             this.ScaleH = ScaleH;
+
+            shooty = new ShootyHand(Hand, new Point(0, 0), ScaleH);
+        }
+        public void UpdateHand(MouseState Mosy)
+        {
+            shooty.Position.X = Position.X + Size.X / 2;
+            shooty.Position.Y = Position.Y + Size.Y/2;
+            shooty.OrientHand(Mosy);
         }
         public void MovePlayerGravity(ColisionBox enemy)
         {
