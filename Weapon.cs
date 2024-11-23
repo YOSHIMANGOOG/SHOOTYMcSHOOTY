@@ -37,7 +37,7 @@ namespace SHOOTYMcSHOOTY
             _spriteBatch.Draw(Texture, new Vector2(Position.X, Position.Y), null, Color.White, CurrentRotation - MathF.PI / 2, Texture.Bounds.Center.ToVector2(), Scale, SpriteEffects.None, 0f);
         }
         public abstract void FireWeapon(MouseState mousy);
-        public abstract bool CheckIfHit(ColisionBox enemy);
+        public abstract bool CheckIfHit(ColisionBox[] enemy);
     }
     
     public class Pistol : Weapon
@@ -49,10 +49,21 @@ namespace SHOOTYMcSHOOTY
             this.Scale = Scale;
             this.ReloadTime = ReloadTime;
         }
-
-        public override bool CheckIfHit(ColisionBox enemy)
+        // x = 2
+        // y = 2 -3 < x < 3 
+        // y = 2x + b
+        // 2 = 2x + b
+        // (2-b)/2 = x
+        // raytracing is HARD xd
+        public override bool CheckIfHit(ColisionBox[] enemy)
         {
-            
+            for (int i = 0; i < enemy.Length; i++)
+            {
+                if ((enemy[i].boundingBoxBody.Bottom - Position.Y)/Math.Tan((double)CurrentRotation - (double)Math.PI/2) + Position.X >= enemy[i].Position.X && (enemy[i].boundingBoxBody.Bottom - Position.Y) / Math.Tan((double)CurrentRotation - (double)Math.PI / 2) + Position.X <= enemy[i].boundingBoxBody.Right)
+                {
+                    return true;
+                }
+            }
             return false;
             //Draw a line and then check if it hit anything
         }

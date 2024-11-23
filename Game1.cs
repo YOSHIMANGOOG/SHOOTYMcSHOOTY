@@ -16,6 +16,7 @@ namespace SHOOTYMcSHOOTY
         Player theBozo;
         Platform platform;
         ShootyHand ShotyLikeAMelody;
+        Pistol wepon;
 
         TimeSpan LETIC = TimeSpan.FromMilliseconds(114);
         TimeSpan ElapsedSus = TimeSpan.Zero;
@@ -53,6 +54,8 @@ namespace SHOOTYMcSHOOTY
             ShotyLikeAMelody = new ShootyHand(LeHand, new Point(100, 100), 0.4f);
             theBozo = new Player(new Point(250,250), new Point(45,113), new Texture2D[][] { new Texture2D[] { Body1 }, new Texture2D[] { Body1, Body2 }}, true/*, new Point(5, 10)*/, new int[] {0,3}, [[new Vector2(0f,0f)], [new Vector2(0f, 0f), new Vector2(-7f, -4f)]], 0.4657f, LeHand, 0.2f);
             platform = new Platform(new Point(250,300), new int[] { 0 }, new Texture2D[][] { new Texture2D[] { PlatformTop } }, [[new Vector2(0f,0f)]], true, 0.5f, new Point(75,75));
+
+            wepon = new Pistol(LeHand, new Point(100, 340), 0.4f, 1);
             // TODO: use this.Content to load your game content here
         }
 
@@ -71,6 +74,7 @@ namespace SHOOTYMcSHOOTY
                 theBozo.UpdateAnimations();
                 theBozo.UpdateHand(mousoi);
                 ShotyLikeAMelody.OrientHand(mousoi);
+                Console.WriteLine($"{wepon.CheckIfHit(new ColisionBox[] { platform, theBozo })}");
             }
 
             base.Update(gameTime);
@@ -88,6 +92,7 @@ namespace SHOOTYMcSHOOTY
             platform.DrawThingDeug(_spriteBatch);
             ShotyLikeAMelody.DrawHand(_spriteBatch);
             ShotyLikeAMelody.DrawHandDebug(_spriteBatch);
+            wepon.DrawWeapon(_spriteBatch);
 
             _spriteBatch.End();
             base.Draw(gameTime);
