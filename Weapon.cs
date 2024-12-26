@@ -87,16 +87,16 @@ namespace SHOOTYMcSHOOTY
                 }
                 if (Rotation > -Math.PI && Rotation < 0)
                 {
-                    var thingy = (enemy[i].boundingBoxBody.Bottom - Position.Y) / Math.Tan((double)CurrentRotation) + Position.X;
-                    if (thingy >= enemy[i].Position.X && thingy <= enemy[i].boundingBoxBody.Right && enemy[i].boundingBoxBody.Bottom > Position.Y)
+                    var thingy = (enemy[i].Position.Y - Position.Y) / Math.Tan((double)CurrentRotation) + Position.X;
+                    if (thingy >= enemy[i].Position.X && thingy <= enemy[i].boundingBoxBody.Right && enemy[i].Position.Y > Position.Y)
                     {
                         return true;
                     }
                 }
                 if ((Rotation > -Math.PI /2 && Rotation <= 0) || (Rotation >= 0 && Rotation < Math.PI/2))
                 {
-                    var thingy2 = Math.Tan((double)CurrentRotation) * (enemy[i].boundingBoxBody.Right - Position.X) + Position.Y;
-                    if (thingy2 >= enemy[i].Position.Y && thingy2 <= enemy[i].boundingBoxBody.Bottom && enemy[i].boundingBoxBody.Right > Position.X)
+                    var thingy2 = Math.Tan((double)CurrentRotation) * (enemy[i].Position.X - Position.X) + Position.Y;
+                    if (thingy2 >= enemy[i].Position.Y && thingy2 <= enemy[i].boundingBoxBody.Bottom && enemy[i].Position.X > Position.X)
                     {
                         return true;
                     }
