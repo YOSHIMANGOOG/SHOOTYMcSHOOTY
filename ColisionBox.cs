@@ -157,6 +157,11 @@ namespace SHOOTYMcSHOOTY
         {
 
         }
+
+        public virtual void GetHit()
+        {
+
+        }
     }
         //make a colision check here
         public class Platform : ColisionBox
