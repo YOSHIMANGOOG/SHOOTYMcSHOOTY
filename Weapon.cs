@@ -5,6 +5,7 @@ using MonoGame.Extended.Particles;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
@@ -18,6 +19,8 @@ namespace SHOOTYMcSHOOTY
         public Point Position;
         public float Scale;
         public int ReloadTime;
+
+        public int ReloadTimeC;
 
         public float Rotation;
         public float CurrentRotation
@@ -43,8 +46,22 @@ namespace SHOOTYMcSHOOTY
         {
             _spriteBatch.Draw(Texture, new Vector2(Position.X, Position.Y), null, Color.White, CurrentRotation, Texture.Bounds.Center.ToVector2(), Scale, SpriteEffects.None, 0f);
         }
-        public abstract void FireWeapon(MouseState mousy);
-        public abstract bool CheckIfHit(ColisionBox[] enemy);
+        public bool ReloadTimer()
+        {
+            //Timer is in frames
+            if (ReloadTimeC >= ReloadTime)
+            {
+                return true;
+            }
+            ReloadTimeC++;
+            return false;
+        }
+        public virtual void Update()
+        {
+            ReloadTimer();
+        }
+        public abstract void FireWeapon(MouseState mousy, ColisionBox[] LeBoxes);
+        public abstract bool CheckIfHit(ColisionBox enemy);
     }
     
     public class Pistol : Weapon
@@ -64,50 +81,64 @@ namespace SHOOTYMcSHOOTY
         // raytracing is HARD xd
         //Fix the stupid Monogame unit circle
         //Its 0, Pi/2, Pi, 3Pi/2, then back to 0 clockwise (holy shi-)
-        public override bool CheckIfHit(ColisionBox[] enemy)
+        public override bool CheckIfHit(ColisionBox enemy)
         {
-            for (int i = 0; i < enemy.Length; i++)
-            {
                 Console.WriteLine($"{Rotation * 180/Math.PI}");
                 if (Rotation > 0 && Rotation < Math.PI)
                 {
-                    var thingy = (enemy[i].boundingBoxBody.Bottom - Position.Y) / Math.Tan((double)CurrentRotation) + Position.X;
-                    if (thingy >= enemy[i].Position.X && thingy <= enemy[i].boundingBoxBody.Right && enemy[i].boundingBoxBody.Bottom < Position.Y)
+                    var thingy = (enemy.boundingBoxBody.Bottom - Position.Y) / Math.Tan((double)CurrentRotation) + Position.X;
+                    if (thingy >= enemy.Position.X && thingy <= enemy.boundingBoxBody.Right && enemy.boundingBoxBody.Bottom < Position.Y)
                     {
                         return true;
                     }
                 }
                 if((Rotation > Math.PI /2 && Rotation < Math.PI) || (Rotation > -Math.PI && Rotation < -Math.PI/2))
                 {
-                    var thingy2 = Math.Tan((double)CurrentRotation) * (enemy[i].boundingBoxBody.Right - Position.X) + Position.Y;
-                    if (thingy2 >= enemy[i].Position.Y && thingy2 <= enemy[i].boundingBoxBody.Bottom && enemy[i].boundingBoxBody.Right < Position.X)
+                    var thingy2 = Math.Tan((double)CurrentRotation) * (enemy.boundingBoxBody.Right - Position.X) + Position.Y;
+                    if (thingy2 >= enemy.Position.Y && thingy2 <= enemy.boundingBoxBody.Bottom && enemy.boundingBoxBody.Right < Position.X)
                     {
                         return true;
                     }
                 }
                 if (Rotation > -Math.PI && Rotation < 0)
                 {
-                    var thingy = (enemy[i].Position.Y - Position.Y) / Math.Tan((double)CurrentRotation) + Position.X;
-                    if (thingy >= enemy[i].Position.X && thingy <= enemy[i].boundingBoxBody.Right && enemy[i].Position.Y > Position.Y)
+                    var thingy = (enemy.Position.Y - Position.Y) / Math.Tan((double)CurrentRotation) + Position.X;
+                    if (thingy >= enemy.Position.X && thingy <= enemy.boundingBoxBody.Right && enemy.Position.Y > Position.Y)
                     {
                         return true;
                     }
                 }
                 if ((Rotation > -Math.PI /2 && Rotation <= 0) || (Rotation >= 0 && Rotation < Math.PI/2))
                 {
-                    var thingy2 = Math.Tan((double)CurrentRotation) * (enemy[i].Position.X - Position.X) + Position.Y;
-                    if (thingy2 >= enemy[i].Position.Y && thingy2 <= enemy[i].boundingBoxBody.Bottom && enemy[i].Position.X > Position.X)
+                    var thingy2 = Math.Tan((double)CurrentRotation) * (enemy.Position.X - Position.X) + Position.Y;
+                    if (thingy2 >= enemy.Position.Y && thingy2 <= enemy.boundingBoxBody.Bottom && enemy.Position.X > Position.X)
                     {
                         return true;
                     }
                 }
-            }
             return false;
             //Draw a line and then check if it hit anything
         }
-        public override void FireWeapon(MouseState mousy)
+        public override void FireWeapon(MouseState mousy, ColisionBox[] LeBoxes)
         {
-            //
+            // Do split check to see which collision box is hit first
+            // ex: LeBoxes.Length = 5
+            // LeBoxes[all].X = {12, 6, 5, 306, 1)
+            // CheckIfHit(LeBoxes[all]) == (true, false, true, true, false)
+            // LeBoxes[0] > LeBoxes[1] (remove leBoxes[0] from list)
+            // LeBoxes[1] < LeBoxes[2] (remove LeBoxes[2] from list)
+            // LeBoxes[1].HitWithABigStick()
+            if(ReloadTimer() == true)
+            {
+                List<ColisionBox> a = new List<ColisionBox>();
+                for(int i = 0;i < LeBoxes.Length; i++)
+                {
+                    if (CheckIfHit(LeBoxes[i]) == true)
+                    {
+                        a.Add(LeBoxes[i]);
+                    }
+                }
+            }
         }
     }
 }
