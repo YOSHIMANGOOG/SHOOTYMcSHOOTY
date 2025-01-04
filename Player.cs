@@ -17,7 +17,7 @@ namespace SHOOTYMcSHOOTY
         public float ScaleH;
         public ShootyHand shooty;
         public Weapon wepon;
-
+        
         public Player(Point position, Point Size, Texture2D[][] animation, bool IsCollisionOn, int[] frameIntervol, Vector2[][] Origins, float Scale, Texture2D Hand, float ScaleH, Weapon wepon)
         {
             this.Position = position;
@@ -234,6 +234,11 @@ namespace SHOOTYMcSHOOTY
                     }
                 }
             }
+        }
+
+        public override void DoDmg(int a)
+        {
+            Console.WriteLine("BBBBBBBBBBBBBB");
         }
     }
 }

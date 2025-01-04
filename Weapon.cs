@@ -3,8 +3,8 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended.Particles;
 using System;
-using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.ExceptionServices;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
@@ -48,86 +48,43 @@ namespace SHOOTYMcSHOOTY
         }
         public bool Timer()
         {
-            ReloadTimeC++;
             if(ReloadTimeC >= ReloadTimeS)
             {
-                ReloadTimeC = 0;
                 return true;
             }
-            return false;
-        }
-        public abstract void FireWeapon(ColisionBox[] enemy);
-        public abstract bool CheckIfHit(ColisionBox enemy);
-    }
-    
-    public class Pistol : Weapon
-    {
-        public Pistol(Texture2D Texture, Point Position, float Scale, int ReloadTimeS)
-        {
-            this.Texture = Texture;
-            this.Position = Position;
-            this.Scale = Scale;
-            this.ReloadTimeS = ReloadTimeS;
-        }
-        // x = 2
-        // y = 2 -3 < x < 3 
-        // y = 2x + b
-        // 2 = 2x + b
-        // (2-b)/2 = x
-        // raytracing is HARD xd
-        //Fix the stupid Monogame unit circle
-        //Its 0, Pi/2, Pi, 3Pi/2, then back to 0 clockwise (holy shi-)
-        public override bool CheckIfHit(ColisionBox enemy)
-        {
-                Console.WriteLine($"{Rotation * 180/Math.PI}");
-                if (Rotation > 0 && Rotation < Math.PI)
-                {
-                    var thingy = (enemy.boundingBoxBody.Bottom - Position.Y) / Math.Tan((double)CurrentRotation) + Position.X;
-                    if (thingy >= enemy.Position.X && thingy <= enemy.boundingBoxBody.Right && enemy.boundingBoxBody.Bottom < Position.Y)
-                    {
-                        return true;
-                    }
-                }
-                if((Rotation > Math.PI /2 && Rotation < Math.PI) || (Rotation > -Math.PI && Rotation < -Math.PI/2))
-                {
-                    var thingy2 = Math.Tan((double)CurrentRotation) * (enemy.boundingBoxBody.Right - Position.X) + Position.Y;
-                    if (thingy2 >= enemy.Position.Y && thingy2 <= enemy.boundingBoxBody.Bottom && enemy.boundingBoxBody.Right < Position.X)
-                    {
-                        return true;
-                    }
-                }
-                if (Rotation > -Math.PI && Rotation < 0)
-                {
-                    var thingy = (enemy.Position.Y - Position.Y) / Math.Tan((double)CurrentRotation) + Position.X;
-                    if (thingy >= enemy.Position.X && thingy <= enemy.boundingBoxBody.Right && enemy.Position.Y > Position.Y)
-                    {
-                        return true;
-                    }
-                }
-                if ((Rotation > -Math.PI /2 && Rotation <= 0) || (Rotation >= 0 && Rotation < Math.PI/2))
-                {
-                    var thingy2 = Math.Tan((double)CurrentRotation) * (enemy.Position.X - Position.X) + Position.Y;
-                    if (thingy2 >= enemy.Position.Y && thingy2 <= enemy.boundingBoxBody.Bottom && enemy.Position.X > Position.X)
-                    {
-                        return true;
-                    }
-                }
-            return false;
-            //Draw a line and then check if it hit anything
-        }
-        public override void FireWeapon(ColisionBox[] enemy)
-        {
-            if(Timer() == true)
+            else
             {
-                //Draw line ig
-                for (int i = 0; i < enemy.Length; i++)
+                ReloadTimeC++;
+                return false;
+            }
+        }
+        public abstract void FireWeapon(ColisionBox[] enemy, MouseState mousoi);
+        public abstract bool CheckIfHit(ColisionBox enemy);
+        public abstract void WeaponAnimation();
+
+        public int stupidSquaring2Thing(int a)
+        {
+            if(a >= 2)
+            {
+                int stupidVar = 1;
+                while(true)
                 {
-                    if (CheckIfHit(enemy[i]) == true)
+                    if(a >= Math.Pow(2,stupidVar))
                     {
-                        //if()
+                        stupidVar++;
+                    }
+                    else
+                    {
+                        return stupidVar;
                     }
                 }
             }
+            return -1;
+        }
+
+        public void Update()
+        {
+            Timer();
         }
     }
 }

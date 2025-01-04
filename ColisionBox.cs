@@ -157,8 +157,15 @@ namespace SHOOTYMcSHOOTY
         {
 
         }
+        public double distanceFunc(Point a)
+        {
 
-        public virtual void GetHit()
+            double xterm = Math.Pow((double)(Position.X - a.X), 2);
+            double yterm = Math.Pow((double)(Position.Y - a.Y), 2);
+            return Math.Sqrt(xterm + yterm); ;
+        }
+
+        public virtual void DoDmg(int a)
         {
 
         }
@@ -176,5 +183,10 @@ namespace SHOOTYMcSHOOTY
                 this.Scale = Scale;
                 this.Size = Size;
             }
+
+        public override void DoDmg(int a)
+        {
+            Console.WriteLine("AAAAAAAAAAAAAAAAA");
         }
+    }
 }
