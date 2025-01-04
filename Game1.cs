@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended;
@@ -84,8 +85,7 @@ namespace SHOOTYMcSHOOTY
                 theBozo.UpdateHand(mousoi);
                 theBozo.wepon.FireWeapon(new ColisionBox[] { theBozo, platform, platform2 }, mousoi);
                 ShotyLikeAMelody.OrientHand(mousoi);
-                theBozo.wepon.Update();
-                //Console.WriteLine($"{theBozo.wepon.CheckIfHit(new ColisionBox[] { platform})}");
+                Console.WriteLine($"{theBozo.wepon.CheckIfHit(new ColisionBox[] { platform})}");
             }
 
             base.Update(gameTime);
