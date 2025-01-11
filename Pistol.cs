@@ -60,6 +60,8 @@ namespace SHOOTYMcSHOOTY
             return false;
             //Draw a line and then check if it hit anything
         }
+
+
         public override void FireWeapon(ColisionBox[] enemy, MouseState mousoi)
         {
             if(Timer() == true && mousoi.LeftButton == ButtonState.Pressed)
@@ -99,6 +101,7 @@ namespace SHOOTYMcSHOOTY
             }
         }
 
+        
         public override void WeaponAnimation()
         {
             throw new NotImplementedException();

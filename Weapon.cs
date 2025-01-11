@@ -21,7 +21,7 @@ namespace SHOOTYMcSHOOTY
         public int ReloadTimeS;
         public int ReloadTimeC;
 
-        public int ReloadTimeC;
+       
 
         public float Rotation;
         public float CurrentRotation
@@ -48,71 +48,48 @@ namespace SHOOTYMcSHOOTY
         {
             _spriteBatch.Draw(Texture, new Vector2(Position.X, Position.Y), null, Color.White, CurrentRotation, Texture.Bounds.Center.ToVector2(), Scale, SpriteEffects.None, 0f);
         }
-        public abstract void FireWeapon(MouseState mousy);
-        public abstract bool CheckIfHit(ColisionBox[] enemy);
-    }
-    
-    public class Pistol : Weapon
-    {
-        public Pistol(Texture2D Texture, Point Position, float Scale, int ReloadTime)
+        public abstract void FireWeapon(ColisionBox[] a, MouseState mousy);
+        public abstract bool CheckIfHit(ColisionBox enemy);
+        public bool Timer()
         {
-            this.Texture = Texture;
-            this.Position = Position;
-            this.Scale = Scale;
-            this.ReloadTime = ReloadTime;
-        }
-        // x = 2
-        // y = 2 -3 < x < 3 
-        // y = 2x + b
-        // 2 = 2x + b
-        // (2-b)/2 = x
-        // raytracing is HARD xd
-        //Fix the stupid Monogame unit circle
-        //Its 0, Pi/2, Pi, 3Pi/2, then back to 0 clockwise (holy shi-)
-        public override bool CheckIfHit(ColisionBox[] enemy)
-        {
-            for (int i = 0; i < enemy.Length; i++)
+            if (ReloadTimeC >= ReloadTimeS)
             {
-                Console.WriteLine($"{Rotation * 180/Math.PI}");
-                if (Rotation > 0 && Rotation < Math.PI)
+                return true;
+            }
+            else
+            {
+                ReloadTimeC++;
+                return false;
+            }
+        }
+       
+        public abstract void WeaponAnimation();
+
+        public int stupidSquaring2Thing(int a)
+        {
+            if (a >= 2)
+            {
+                int stupidVar = 1;
+                while (true)
                 {
-                    var thingy = (enemy[i].boundingBoxBody.Bottom - Position.Y) / Math.Tan((double)CurrentRotation) + Position.X;
-                    if (thingy >= enemy[i].Position.X && thingy <= enemy[i].boundingBoxBody.Right && enemy[i].boundingBoxBody.Bottom < Position.Y)
+                    if (a >= Math.Pow(2, stupidVar))
                     {
-                        return true;
+                        stupidVar++;
                     }
-                }
-                if((Rotation > Math.PI /2 && Rotation < Math.PI) || (Rotation > -Math.PI && Rotation < -Math.PI/2))
-                {
-                    var thingy2 = Math.Tan((double)CurrentRotation) * (enemy[i].boundingBoxBody.Right - Position.X) + Position.Y;
-                    if (thingy2 >= enemy[i].Position.Y && thingy2 <= enemy[i].boundingBoxBody.Bottom && enemy[i].boundingBoxBody.Right < Position.X)
-                    {
-                        return true;
-                    }
-                }
-                if (Rotation > -Math.PI && Rotation < 0)
-                {
-                    var thingy = (enemy[i].boundingBoxBody.Bottom - Position.Y) / Math.Tan((double)CurrentRotation) + Position.X;
-                    if (thingy >= enemy[i].Position.X && thingy <= enemy[i].boundingBoxBody.Right && enemy[i].boundingBoxBody.Bottom > Position.Y)
-                    {
-                        return true;
-                    }
-                }
-                if ((Rotation > -Math.PI /2 && Rotation <= 0) || (Rotation >= 0 && Rotation < Math.PI/2))
-                {
-                    var thingy2 = Math.Tan((double)CurrentRotation) * (enemy[i].boundingBoxBody.Right - Position.X) + Position.Y;
-                    if (thingy2 >= enemy[i].Position.Y && thingy2 <= enemy[i].boundingBoxBody.Bottom && enemy[i].boundingBoxBody.Right > Position.X)
+                    else
                     {
                         return stupidVar;
                     }
                 }
             }
-            return false;
-            //Draw a line and then check if it hit anything
+            return -1;
         }
-        public override void FireWeapon(MouseState mousy)
+
+        public void Update()
         {
-            //
+            Timer();
         }
     }
+    
+    
 }

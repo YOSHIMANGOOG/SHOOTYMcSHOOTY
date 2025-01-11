@@ -12,7 +12,7 @@ namespace SHOOTYMcSHOOTY
         public Vector2 gravity = new Vector2(0,-0.5f);
         public bool IsJumping;
         public float[] MaxSpeed = new float[2] { 5f, 4f };
-
+       
         public Texture2D Hand;
         public float ScaleH;
         public ShootyHand shooty;

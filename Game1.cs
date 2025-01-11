@@ -85,7 +85,7 @@ namespace SHOOTYMcSHOOTY
                 theBozo.UpdateHand(mousoi);
                 theBozo.wepon.FireWeapon(new ColisionBox[] { theBozo, platform, platform2 }, mousoi);
                 ShotyLikeAMelody.OrientHand(mousoi);
-                Console.WriteLine($"{theBozo.wepon.CheckIfHit(new ColisionBox[] { platform})}");
+                //Console.WriteLine($"{theBozo.wepon.CheckIfHit( { platform})}");
             }
 
             base.Update(gameTime);
